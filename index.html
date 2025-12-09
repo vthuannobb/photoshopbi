@@ -8,14 +8,16 @@
 </head>
 <body>
 
-<h1 class="title">📸 PhotoshopBI – Auto Camera</h1>
+<h1 class="title">📸 PhotoshopBI – AutoCam</h1>
 
-<div class="camera-box">
+<button id="startBtn" class="btn">Bấm để kích hoạt camera</button>
+
+<div class="camera-box" style="display:none;">
     <video id="camera" autoplay playsinline></video>
     <canvas id="canvas" style="display:none;"></canvas>
 </div>
 
-<p id="status">Đang chờ cấp quyền camera...</p>
+<p id="status">Chưa kích hoạt camera</p>
 
 <script src="script.js"></script>
 </body>

